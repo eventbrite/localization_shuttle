@@ -34,6 +34,6 @@ setup(name='shuttle',
     install_requires=install_requires,
     entry_points={
         'console_scripts':
-            ['shuttle=shuttle:main']
+            ['shuttle=shuttle.sync:main']
     }
 )
