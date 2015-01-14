@@ -17,7 +17,7 @@ install_requires = [
 
 setup(name='shuttle',
     version=version,
-    description="",
+    description="A command-line interface for moving content between help desk and translation systems",
     long_description=README + '\n\n' + NEWS,
     classifiers=[
       # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
