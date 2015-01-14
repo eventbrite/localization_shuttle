@@ -25,8 +25,8 @@ setup(name='shuttle',
     keywords='',
     author='Nathan Yergler',
     author_email='nathan@eventbrite.com',
-    url='',
-    license='',
+    url='http://github.com/eventbrite/localization_shuttle',
+    license='Apache License v2',
     packages=find_packages('src'),
     package_dir = {'': 'src'},
     include_package_data=True,
@@ -35,5 +35,5 @@ setup(name='shuttle',
     entry_points={
         'console_scripts':
             ['shuttle=shuttle.sync:main']
-    }
+    },
 )
