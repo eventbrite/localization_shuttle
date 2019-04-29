@@ -31,7 +31,18 @@ class Tx(object):
             project.Project._construct_path_to_collection()
         )
 
-    def get_project(self, locale, **kwargs):
+    def get_project(self, locale, source_language_code=DEFAULT_SOURCE_LANGUAGE, **kwargs):
+        """
+        Gets or creates the Transifex project for the current project prefix and locale
+
+        :param locale: A locale to which content is to be translated
+        :type locale: string
+        :param source_language_code: The language of the original untranslated content (i.e. Spanish),
+            defaults to DEFAULT_SOURCE_LANGUAGE, which is English
+        :type source_language_code: string, optional
+        :return: The Transifex project to which resources can be pushed or pulled
+        :rtype: project.Project
+        """
 
         try:
             locale_project = project.Project.get(slug=self.get_project_slug(locale))
@@ -46,7 +57,7 @@ class Tx(object):
                 'description': 'Help Center pages to translate to %s' % (
                     locale,
                 ),
-                'source_language_code': DEFAULT_SOURCE_LANGUAGE,
+                'source_language_code': source_language_code,
                 'private': True,
             }
 
