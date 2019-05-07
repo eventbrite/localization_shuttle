@@ -11,7 +11,7 @@ version = '0.2'
 install_requires = [
     'babel',
     'deskapi',
-    'txlib',
+    'txlib-too',
 ]
 
 
