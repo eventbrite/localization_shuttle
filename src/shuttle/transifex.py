@@ -1,9 +1,9 @@
 from django.conf import settings
-from txlib import registry
-from txlib.http import auth
-from txlib.http.exceptions import NotFoundError, RemoteServerError
-from txlib.http import http_requests
-from txlib.api import (
+from txlib_too import registry
+from txlib_too.http import auth
+from txlib_too.http.exceptions import NotFoundError, RemoteServerError
+from txlib_too.http import http_requests
+from txlib_too.api import (
     project,
     resources,
     translations,
@@ -15,6 +15,7 @@ LOCALES = ('fr_CA', 'fr_FR', 'es_ES')
 UNTRANSLATED_LOCALES = ('en', 'en-us',)
 DEFAULT_SOURCE_LANGUAGE = 'en_US'
 DEFAULT_I18N_TYPE = 'HTML'
+
 
 class Tx(object):
 
