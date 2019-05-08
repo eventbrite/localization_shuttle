@@ -6,9 +6,9 @@ import babel.messages.catalog
 import babel.messages.pofile
 from deskapi.models import DeskApi2
 from django.conf import settings
-import txlib.api.statistics
-import txlib.api.translations
-from txlib.http.exceptions import NotFoundError
+import txlib_too.api.statistics
+import txlib_too.api.translations
+from txlib_too.http.exceptions import NotFoundError
 
 from transifex import Tx
 
@@ -216,7 +216,7 @@ class DeskTopics(DeskTxSync):
     def pull(self):
         """Pull topics from Transifex."""
 
-        topic_stats = txlib.api.statistics.Statistics.get(
+        topic_stats = txlib_too.api.statistics.Statistics.get(
             project_slug=self.tx_project_slug,
             resource_slug=self.TOPIC_STRINGS_SLUG,
         )
@@ -237,7 +237,7 @@ class DeskTopics(DeskTxSync):
 
             if locale_stats['completed'] == '100%':
                 # get the resource from Tx
-                translation = txlib.api.translations.Translation.get(
+                translation = txlib_too.api.translations.Translation.get(
                     project_slug=self.tx_project_slug,
                     slug=self.TOPIC_STRINGS_SLUG,
                     lang=locale,
