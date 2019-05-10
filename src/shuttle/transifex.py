@@ -67,7 +67,7 @@ class Tx(object):
                 dict((k,v) for k,v in kwargs.items() if k in valid_keys)
             )
 
-            for k,v in defaults.iteritems():
+            for k,v in defaults.items():
                 setattr(locale_project, k, v)
 
             locale_project.save()
