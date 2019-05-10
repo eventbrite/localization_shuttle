@@ -64,7 +64,7 @@ class Tx(object):
 
             valid_keys = ('name','description')
             defaults.update(
-                dict((k,v) for k,v in kwargs.iteritems() if k in valid_keys)
+                dict((k,v) for k,v in kwargs.items() if k in valid_keys)
             )
 
             for k,v in defaults.iteritems():
@@ -128,8 +128,8 @@ class Tx(object):
 
         try:
             stats = statistics.Statistics.get(
-                project_slug = self.get_project_slug(locale),
-                resource_slug = slug,
+                project_slug=self.get_project_slug(locale),
+                resource_slug=slug,
             )
         except NotFoundError:
             stats = None
