@@ -124,11 +124,11 @@ class Tx(object):
 
         return resource
 
-    def resource_statistics(self, slug, locale):
+    def resource_statistics(self, slug, locale, project_slug=None):
 
         try:
             stats = statistics.Statistics.get(
-                project_slug=self.get_project_slug(locale),
+                project_slug=project_slug or self.get_project_slug(locale),
                 resource_slug=slug,
             )
         except NotFoundError:
@@ -141,12 +141,12 @@ class Tx(object):
         if resource:
             resource.delete()
 
-    def translation_exists(self, slug, lang):
+    def translation_exists(self, slug, lang, project_slug=None):
         """Return True if the translation exists for this slug."""
 
         try:
             return translations.Translation.get(
-                project_slug=self.get_project_slug(lang),
+                project_slug=project_slug or self.get_project_slug(lang),
                 slug=slug,
                 lang=lang,
             )
@@ -156,19 +156,19 @@ class Tx(object):
 
         return False
 
-    def list_resources(self, lang):
+    def list_resources(self, lang, project_slug=None):
         """Return a sequence of resources for a given lang.
 
         Each Resource is a dict containing the slug, name, i18n_type,
         source_language_code and the category.
         """
-
+        project_slug = project_slug or self.get_project_slug(lang)
         return registry.registry.http_handler.get(
             '/api/2/project/%s/resources/' % (
-                self.get_project_slug(lang),)
+                project_slug,)
         )
 
-    def resources(self, lang, slug):
+    def resources(self, lang, slug, project_slug=None):
         """Generate a list of Resources in the Project.
 
         Yields dicts from the Tx API, with keys including the slug,
@@ -177,7 +177,7 @@ class Tx(object):
         """
 
         resource = resources.Resource.get(
-            project_slug=self.get_project_slug(lang),
+            project_slug=project_slug or self.get_project_slug(lang),
             slug=slug,
         )
 
@@ -198,6 +198,3 @@ class Tx(object):
             pass
 
         return None
-
-    ## def completed_translations(self, slug):
-    ##     """Generate (lang, translation) tuples for the given resource slug."""
