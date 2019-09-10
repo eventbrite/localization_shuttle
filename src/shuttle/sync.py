@@ -45,15 +45,11 @@ class DeskTxSync(object):
         if locale.lower().startswith('en'):
             return False
 
-        return (locale in self.enabled_locales or
-
-                self.reverse_locale_map.get(locale.lower(), None)
-                in self.enabled_locales or
-
-                locale in self.lower_locales or
-
-                self.reverse_locale_map.get(locale.lower(), None)
-                in self.lower_locales
+        return (
+            locale in self.enabled_locales or
+            self.reverse_locale_map.get(locale.lower(), None) in self.enabled_locales or
+            locale in self.lower_locales or
+            self.reverse_locale_map.get(locale.lower(), None) in self.lower_locales
         )
 
     def desk_locale(self, locale):
@@ -64,13 +60,11 @@ class DeskTxSync(object):
 
     def push(self):
         """Push data from Desk into Transifex."""
-
-        raise NotImplemented()
+        raise NotImplementedError
 
     def pull(self):
         """Pull data from Transifex into Desk."""
-
-        raise NotImplemented()
+        raise NotImplementedError
 
 
 class DeskEnglishTxSync(DeskTxSync):
@@ -105,11 +99,12 @@ class DeskEnglishTopics(DeskEnglishTxSync):
                     if not self._process_locale(locale):
                         continue
 
-                    log.info('Preparing to copy topic %s (%s) for %s' % (
+                    self.log.info(
+                        'Preparing to copy topic %s (%s) for %s',
                         topic.name,
                         topic.api_href,
                         locale,
-                        ))
+                    )
 
                     locale_kwargs = dict(
                         name=topic.name,
@@ -128,10 +123,11 @@ class DeskEnglishTopics(DeskEnglishTxSync):
                         )
 
                     if not success:
-                        log.error('Error updating topic %s (%s)' % (
+                        self.log.error(
+                            'Error updating topic %s (%s)',
                             topic.name,
                             topic.api_href,
-                            ))
+                        )
 
 
 class DeskEnglishTutorials(DeskEnglishTxSync):
@@ -158,13 +154,12 @@ class DeskEnglishTutorials(DeskEnglishTxSync):
                     self.log.debug('Skipping locale %s.', translation.locale)
                     continue
 
-                if (self.options.force or
-                    translation.out_of_date
-                ):
+                if (self.options.force or translation.out_of_date):
 
-                    log.info('Preparing to push %s for %s',
-                             a.id,
-                             translation.locale,
+                    self.log.info(
+                        'Preparing to push %s for %s',
+                        a.id,
+                        translation.locale,
                     )
 
                     success = translation.update(
@@ -173,9 +168,10 @@ class DeskEnglishTutorials(DeskEnglishTxSync):
                     )
 
                     if not success:
-                        log.error('Error updating %s (desk ID %s).',
-                                  translation.locales,
-                                  a.id,
+                        self.log.error(
+                            'Error updating %s (desk ID %s).',
+                            translation.locales,
+                            a.id,
                         )
 
 
@@ -367,14 +363,15 @@ class DeskTutorials(DeskTxSync):
                 tx.get_project(our_locale)
 
                 a_id = a.api_href.rsplit('/', 1)[1]
-                if (self.options.force or
+                if (
+                    self.options.force or
                     not tx.resource_exists(a_id, our_locale) or
                     translation.outdated
                 ):
-                    self.log.info('Resource %(id)s out of date in %(locale)s; updating.' %
-                             {'id': a_id,
-                              'locale': our_locale,
-                              },
+                    self.log.info(
+                        'Resource %s out of date in %s; updating.',
+                        a_id,
+                        our_locale,
                     )
 
                     tx.create_or_update_resource(
@@ -456,21 +453,14 @@ def parse_args():
                       ),
                       help="Types of content to sync: topics, english_topics, tutorials, english_tutorials, all")
 
-    parser.add_option("--push", action="store_true",
-                        help="Push content from Desk to Tx")
-    parser.add_option("--pull", action="store_true",
-                        help="Pull content from Tx to Desk")
-
-    parser.add_option('-l', '--locales', action='store',
-                      help="Comma delimited list of locales to process.")
-    parser.add_option('-r', '--resources', action='store',
-                      help="Comma delimited list of Desk Resource IDs to sync "
-                      "(only supported for tutorials)",
+    parser.add_option("--push", action="store_true", help="Push content from Desk to Tx")
+    parser.add_option("--pull", action="store_true", help="Pull content from Tx to Desk")
+    parser.add_option('-l', '--locales', action='store', help="Comma delimited list of locales to process.")
+    parser.add_option(
+        '-r', '--resources', action='store',
+        help="Comma delimited list of Desk Resource IDs to sync (only supported for tutorials)",
     )
-
-    parser.add_option('--force', action='store_true',
-                      help='Always push to Tx even if not out of date.',
-                      )
+    parser.add_option('--force', action='store_true', help='Always push to Tx even if not out of date.')
 
     return parser.parse_args()
 
@@ -523,6 +513,7 @@ def main():
 
         if options.pull:
             sync.pull()
+
 
 if __name__ == '__main__':
     main()

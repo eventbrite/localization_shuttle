@@ -1,9 +1,15 @@
-from setuptools import setup, find_packages
-import sys, os
+import os
 
-here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.rst')).read()
-NEWS = open(os.path.join(here, 'NEWS.txt')).read()
+from setuptools import (
+    find_packages,
+    setup,
+)
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(PROJECT_ROOT, 'README.rst')) as readme_file:
+    README = readme_file.read()
+with open(os.path.join(PROJECT_ROOT, 'NEWS.txt')) as news_file:
+    NEWS = news_file.read()
 
 version = '0.8'
 
@@ -14,12 +20,13 @@ install_requires = [
 ]
 
 
-setup(name='shuttle',
+setup(
+    name='shuttle',
     version=version,
     description="A command-line interface for moving content between help desk and translation systems",
     long_description=README + '\n\n' + NEWS,
     classifiers=[
-      # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     ],
     keywords='',
     author='Nathan Yergler',
@@ -27,7 +34,7 @@ setup(name='shuttle',
     url='http://github.com/eventbrite/localization_shuttle',
     license='Apache License v2',
     packages=find_packages('src'),
-    package_dir = {'': 'src'},
+    package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
