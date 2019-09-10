@@ -62,16 +62,15 @@ class Tx(object):
                 'private': True,
             }
 
-            valid_keys = ('name','description')
+            valid_keys = ('name', 'description')
             defaults.update(
-                dict((k,v) for k,v in kwargs.items() if k in valid_keys)
+                {k: v for k, v in kwargs.items() if k in valid_keys}
             )
 
-            for k,v in defaults.items():
+            for k, v in defaults.items():
                 setattr(locale_project, k, v)
 
             locale_project.save()
-
 
         return locale_project
 
